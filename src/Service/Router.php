@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace  App\Service;
 
 use App\Controller\Frontoffice\PostController;
+use App\Controller\Frontoffice\RssController;
 use App\Model\PostManager;
+use App\Model\RssManager;
 use App\Service\Http\Request;
 use App\View\View;
 
@@ -13,8 +15,10 @@ use App\View\View;
 class Router
 {
     private PostManager $postManager;
+    private RssManager $rssManager;
     private View $view;
     private PostController $postController;
+    private RssController $rssController;
     private Request $request;
 
     public function __construct()
@@ -26,6 +30,7 @@ class Router
 
         // Injection des dépendances
         $this->postController = new PostController($this->postManager, $this->view);
+        $this->rssController = new RssController($this->rssManager, $this->view);
     }
 
     public function run(): void
