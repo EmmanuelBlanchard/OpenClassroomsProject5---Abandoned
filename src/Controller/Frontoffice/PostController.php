@@ -17,7 +17,7 @@ class PostController
         $this->postManager = $postManager;
         $this->view = $view;
     }
-
+    /*
     public function displayOneAction(int $id): void
     {
         $data = $this->postManager->showOne($id);
@@ -27,5 +27,12 @@ class PostController
         } elseif ($data === null) {
             echo '<h1>faire une redirection vers la page d\'erreur, ce post n\'existe pas</h1>';
         }
+    }
+    */
+    public function displayHomeWithTheLastThreePosts(): void
+    {
+        $data = $this->postManager->showLastThreePosts();
+
+        $this->view->render(['template' => 'home', 'allposts' => $data], 'frontoffice');
     }
 }
