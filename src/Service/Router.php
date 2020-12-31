@@ -8,12 +8,14 @@ use App\Controller\Frontoffice\PostController;
 use App\Controller\Frontoffice\RssController;
 use App\Model\PostManager;
 use App\Model\RssManager;
+use App\Service\Database;
 use App\Service\Http\Request;
 use App\View\View;
 
 // cette classe router est un exemple très basic. Cette façon de faire n'est pas optimale
 class Router
 {
+    private Database $database;
     private PostManager $postManager;
     private RssManager $rssManager;
     private View $view;
@@ -24,7 +26,9 @@ class Router
     public function __construct()
     {
         // Dépendances
-        $this->postManager = new PostManager();
+        $this->database = new Database();
+        $this->postManager = new PostManager($this->database);
+        $this->rssManager = new RssManager($this->database);
         $this->view = new View();
         $this->request = new Request();
 
@@ -47,12 +51,39 @@ class Router
         }
         */
 
+        //echo '<pre>';
+        //var_dump($this->request->getGetItem('action'));
+        //echo '</pre>';
+        //die();
+
         $action = $this->request->getGetItem('action') ?? 'home';
 
         // Déterminer sur quelle route nous sommes // Attention algorithme naïf
         if ($action === 'home') {
             // route http://localhost:8000/?action=home
             $this->postController->displayHomeWithTheLastThreePosts();
+        } elseif ($action === 'listOfRss') {
+            // route http://localhost:8000/?action=listOfRss
+            
+            //$this->rssController->browseRssFeeds("https://www.developpez.com/index/rss", "Developpez.com", "https://www.developpez.com");
+            //   Whoops \ Exception \ ErrorException (E_WARNING) Invalid argument supplied for foreach()
+            $this->rssController->browseRssFeeds("https://www.pourlascience.fr/rss.xml", "Pourlascience", "https://www.pourlascience.fr/");
+            //$this->rssController->browseRssFeeds("https://syndication.lesechos.fr/rss/", "LesEchos", "https://syndication.lesechos.fr/");
+            
+            //$this->rssController->browseRssFeeds("https://www.francetvinfo.fr/france.rss", "France Info", "https://www.francetvinfo.fr/");
+            // simplexml_load_file(): https://www.francetvinfo.fr/eco.rss:1: parser error : xmlParseEntityRef: no name
+            //$this->rssController->browseRssFeeds("https://www.francetvinfo.fr/eco.rss", "France Info Eco", "https://www.francetvinfo.fr/");
+            //$this->rssController->browseRssFeeds("https://www.europe1.fr/rss.xml", "Europe 1", "https://www.europe1.fr/");
+
+            //$this->rssController->browseRssFeeds("http://www.latribune.fr/rss/rubriques/actualite.html", "La Tribune", "http://www.latribune.fr");
+
+        } elseif ($action === 'rss') {
+            // route http://localhost:8000/?action=rss
+            $this->rssController->retrieveRssFromTheSite("http://www.lefigaro.fr/rss/figaro_actualites.xml", "Le Figaro", "https://www.lefigaro.fr/");
+        } elseif ($action === 'tryRss') {
+            // route http://localhost:8000/?action=tryRss
+            //$this->rssController->retrieveRss("http://www.lefigaro.fr/rss/figaro_actualites.xml");
+            $this->rssController->retrieveRss1("http://www.lefigaro.fr/rss/figaro_actualites.xml", "Le Figaro", "https://www.lefigaro.fr/");
         } else {
             // faire un controller pour la gestion d'erreur
             echo "Error 404 - cette page n'existe pas<br><a href=http://localhost:8000/?action=post&id=5>Aller Ici</a>";

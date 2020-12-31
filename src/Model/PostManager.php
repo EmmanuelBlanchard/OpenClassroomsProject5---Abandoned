@@ -4,8 +4,17 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Service\Database;
+
 class PostManager
 {
+    private $database;
+    
+    public function __construct(Database $database)
+    {
+        $this->database = $database->getPdo();
+    }
+    
     public function showOne(int $id): ?array
     {
         // *** exemple fictif d'accès à la base de données
