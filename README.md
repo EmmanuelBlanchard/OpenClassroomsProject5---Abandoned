@@ -1,5 +1,5 @@
 # OpenClassroomsProject5
-OpenClassroomsProject5 DWJ
+OpenClassroomsProject5 DWJ - News aggregator
 
 * Installer composer
 * Mettre en place l'autoloading
