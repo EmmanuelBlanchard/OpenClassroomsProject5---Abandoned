@@ -113,6 +113,9 @@ class Router
             // route http://localhost:8000/?action=tryRss
             //$this->rssController->retrieveRss("http://www.lefigaro.fr/rss/figaro_actualites.xml");
             $this->rssController->retrieveRss1("http://www.lefigaro.fr/rss/figaro_actualites.xml", "Le Figaro", "https://www.lefigaro.fr/");
+        } elseif ($action === 'readRssJs') {
+            // route http://localhost:8000/?action=readRssJs
+            $this->rssController->readRssJs();
         } else {
             // faire un controller pour la gestion d'erreur
             echo "Error 404 - cette page n'existe pas<br><a href=http://localhost:8000/?action=post&id=5>Aller Ici</a>";
