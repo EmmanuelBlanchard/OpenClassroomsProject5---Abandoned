@@ -25,7 +25,7 @@ class RssController
         $this->view->render(['template' => 'home', 'allposts' => $data], 'frontoffice');
     }
     
-    public function browseRssFeeds($url, $website, $webiste_url)
+    public function browseRssFeeds($url, $website, $webiste_url): void
     {
         $data = $this->rssManager->retrieveRssWebsite($url, $website, $webiste_url);
         
@@ -37,7 +37,7 @@ class RssController
         $this->view->render(['template' => 'rss', 'allrss' => $data], 'frontoffice');
     }
 
-    public function retrieveRssFromTheSite(string $url, string $website, string $webiste_url)
+    public function retrieveRssFromTheSite(string $url, string $website, string $webiste_url): void
     {
         $rss = simplexml_load_file($url);
 
@@ -68,5 +68,4 @@ class RssController
         */
         $this->view->render(['template' => 'rss1', 'allrss' => $data], 'frontoffice');
     }
-    
 }

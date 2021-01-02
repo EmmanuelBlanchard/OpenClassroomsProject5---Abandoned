@@ -26,7 +26,7 @@ class RssManager
             $link = $item->link;
             $title = $item->title;
             //$datetime = date_create($item->pubDate);
-            $datetime = date_create( (string) $item->pubDate);
+            $datetime = date_create((string) $item->pubDate);
             /*
             $date = date_create('2000-01-01');
             echo date_format($date, 'Y-m-d H:i:s');
@@ -67,34 +67,33 @@ class RssManager
                 ]);
             }
         }
-
     }
 
-    public function feed($feedURL)
+    public function feed($feedURL): void
     {
         $i = 0; // initiate counter to limit the amount of articles to return
         $url = $feedURL; // url to parse
         $rss = simplexml_load_file($url); // the XML parser
             // RSS items loop
-            foreach($rss->channel->item as $item) {  //loop through each item
+            foreach ($rss->channel->item as $item) {  //loop through each item
                 $link = $item->link;  //extract the link
                 $title = $item->title;  //extract the title
                 $date = $item->pubDate;  //extract the date
-                $description = strip_tags( (string) $item->description);  //extract description and strip HTML
-                    if (strlen($description) > 200) {
+                $description = strip_tags((string) $item->description);  //extract description and strip HTML
+                    if (mb_strlen($description) > 200) {
                         // truncate string if greater than 200 characters
-                        $stringCut = substr($description, 0, 200);
+                        $stringCut = mb_substr($description, 0, 200);
                         // make sure it ends in a complete word and add ... at the end
-                        $description = substr($stringCut, 0, strrpos($stringCut, ' ')).'...'; 
+                        $description = mb_substr($stringCut, 0, mb_strrpos($stringCut, ' ')).'...';
                     }
-                    if ($i < 8) { // parse only 8 items
-                        echo '
+                if ($i < 8) { // parse only 8 items
+                    echo '
                             <a class="list-group-item" href="'.$link.'" target="_blank">
                                 <h5 class="list-group-item-heading">'.$title.'<br><small>'.$date.'</small></h5>
                                 <p class="list-group-item-text">'.$description.'</p>
                             </a>
                             ';
-                    }
+                }
                 $i++;
             }
     }
@@ -105,11 +104,11 @@ class RssManager
         $url = $feedURL; // url to parse
         $rss = simplexml_load_file($url); // the XML parser
         // RSS items loop
-        foreach($rss->channel->item as $item) {  //loop through each item
+        foreach ($rss->channel->item as $item) {  //loop through each item
             $link = $item->link;  //extract the link
             $title = $item->title;  //extract the title
             $date = $item->pubDate;  //extract the date
-            $datetime = date_create( (string) $item->pubDate);
+            $datetime = date_create((string) $item->pubDate);
             $date = date_format($datetime, 'd M Y');
             $post_date = date_format($datetime, 'Y-m-d H:i:s');
 
@@ -119,7 +118,6 @@ class RssManager
             $results = $request->fetch(\PDO::FETCH_ASSOC);
 
             if ($results === false) {
-
                 $request = $this->database->prepare('INSERT INTO feeds (title, link, date_item, website_origin, website_url, post_date) VALUES (:title, :link, :date_item, :website_origin, :website_url, :post_date)');
                 
                 return $request->execute([
@@ -133,5 +131,4 @@ class RssManager
             }
         }
     }
-    
 }
