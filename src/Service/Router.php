@@ -116,6 +116,9 @@ class Router
         } elseif ($action === 'readRssJs') {
             // route http://localhost:8000/?action=readRssJs
             $this->rssController->readRssJs();
+        } elseif ($action === 'readJsRssReader') {
+            // route http://localhost:8000/?action=readJsRssReader
+            $this->rssController->readJsRssReader();
         } else {
             // faire un controller pour la gestion d'erreur
             echo "Error 404 - cette page n'existe pas<br><a href=http://localhost:8000/?action=post&id=5>Aller Ici</a>";
