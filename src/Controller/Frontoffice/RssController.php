@@ -69,12 +69,12 @@ class RssController
         $this->view->render(['template' => 'rss1', 'allrss' => $data], 'frontoffice');
     }
 
-    public function readRssJs()
+    public function readRssJs(): void
     {
         $this->view->render(['template' => 'readrssjs'], 'frontoffice');
     }
 
-    public function readJsRssReader()
+    public function readJsRssReader(): void
     {
         $this->view->render(['template' => 'readjsrssreader'], 'frontoffice');
     }

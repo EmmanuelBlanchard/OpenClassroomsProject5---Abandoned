@@ -6,8 +6,10 @@ namespace  App\Service;
 
 use App\Controller\Frontoffice\PostController;
 use App\Controller\Frontoffice\RssController;
+use App\Controller\Frontoffice\WeatherController;
 use App\Model\PostManager;
 use App\Model\RssManager;
+use App\Model\WeatherManager;
 use App\Service\Database;
 use App\Service\Http\Request;
 use App\View\View;
@@ -18,9 +20,11 @@ class Router
     private Database $database;
     private PostManager $postManager;
     private RssManager $rssManager;
+    private WeatherManager $weatherManager;
     private View $view;
     private PostController $postController;
     private RssController $rssController;
+    private WeatherController $weatherController;
     private Request $request;
 
     public function __construct()
@@ -29,12 +33,14 @@ class Router
         $this->database = new Database();
         $this->postManager = new PostManager($this->database);
         $this->rssManager = new RssManager($this->database);
+        $this->weatherManager = new WeatherManager($this->database);
         $this->view = new View();
         $this->request = new Request();
 
         // Injection des dépendances
         $this->postController = new PostController($this->postManager, $this->view);
         $this->rssController = new RssController($this->rssManager, $this->view);
+        $this->weatherController = new WeatherController($this->weatherManager, $this->view);
     }
 
     public function run(): void
@@ -119,6 +125,9 @@ class Router
         } elseif ($action === 'readJsRssReader') {
             // route http://localhost:8000/?action=readJsRssReader
             $this->rssController->readJsRssReader();
+        } elseif ($action === 'readWeatherStack') {
+            // route http://localhost:8000/?action=readWeatherStack
+            $this->weatherController->readWeatherStack();
         } else {
             // faire un controller pour la gestion d'erreur
             echo "Error 404 - cette page n'existe pas<br><a href=http://localhost:8000/?action=post&id=5>Aller Ici</a>";
